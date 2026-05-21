@@ -1,26 +1,161 @@
 @import "tailwindcss";
 
-:root {
-  --background: #ffffff;
-  --foreground: #171717;
-}
+/* Dark mode driven by a `.dark` class on <html> (managed by next-themes). */
+@custom-variant dark (&:where(.dark, .dark *));
 
 @theme inline {
+  /* Semantic, theme-aware tokens (values flip between light & dark below). */
   --color-background: var(--background);
+  --color-surface: var(--surface);
+  --color-surface-2: var(--surface-2);
   --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
+  --color-muted: var(--muted);
+  --color-border: var(--border);
+
+  /* Fixed brand palette. */
+  --color-sky: #38b6ff;
+  --color-sky-600: #1f9fe8;
+  --color-sky-100: #d6efff;
+  --color-sky-50: #eaf6ff;
+  --color-red: #e84040;
+  --color-red-600: #d62f2f;
+  --color-red-50: #fdeaea;
+  --color-navy: #0d1b2a;
+  --color-navy-700: #14283a;
+  --color-online: #22c55e;
+  --color-amber: #f5a623;
+
+  --font-display: var(--font-syne), "Segoe UI", sans-serif;
+  --font-sans: var(--font-dm-sans), "Segoe UI", sans-serif;
+
+  --radius-xl2: 1.25rem;
 }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
+/* ---- Light theme (default) ---- */
+:root {
+  --background: #f7f9fc;
+  --surface: #ffffff;
+  --surface-2: #ffffff;
+  --foreground: #0d1b2a;
+  --muted: #5b6573;
+  --border: #e6ebf2;
+}
+
+/* ---- Dark theme (navy-dominant) ---- */
+.dark {
+  --background: #0a1622;
+  --surface: #14283a;
+  --surface-2: #1b3247;
+  --foreground: #eaf1f8;
+  --muted: #8c9bac;
+  --border: #25405a;
+}
+
+* {
+  border-color: var(--border);
+}
+
+html,
+body {
+  background-color: var(--background);
+  color: var(--foreground);
+  font-family: var(--font-sans);
+  -webkit-font-smoothing: antialiased;
+}
+
+h1,
+h2,
+h3,
+h4,
+.font-display {
+  font-family: var(--font-display);
+  letter-spacing: -0.01em;
+}
+
+/* Hide scrollbars on horizontal category strips. */
+.no-scrollbar::-webkit-scrollbar {
+  display: none;
+}
+.no-scrollbar {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}
+
+/* ---- Sky-blue skeleton shimmer ---- */
+.skeleton {
+  position: relative;
+  overflow: hidden;
+  background-color: var(--surface-2);
+}
+.skeleton::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  transform: translateX(-100%);
+  background: linear-gradient(
+    90deg,
+    transparent,
+    rgba(56, 182, 255, 0.22),
+    transparent
+  );
+  animation: shimmer 1.4s infinite;
+}
+@keyframes shimmer {
+  100% {
+    transform: translateX(100%);
   }
 }
 
-body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+/* ---- Splash pulse ring ---- */
+.pulse-ring {
+  animation: pulse-ring 1.8s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+}
+@keyframes pulse-ring {
+  0% {
+    transform: scale(0.85);
+    opacity: 0.7;
+  }
+  70%,
+  100% {
+    transform: scale(1.7);
+    opacity: 0;
+  }
+}
+
+/* ---- Confirmation checkmark ---- */
+.check-pop {
+  animation: check-pop 0.5s cubic-bezier(0.18, 1.25, 0.4, 1) both;
+}
+@keyframes check-pop {
+  0% {
+    transform: scale(0);
+  }
+  100% {
+    transform: scale(1);
+  }
+}
+
+/* ---- Generic fade / slide entrance ---- */
+.fade-up {
+  animation: fade-up 0.4s ease both;
+}
+@keyframes fade-up {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* App-like tap feedback on interactive cards. */
+.press {
+  transition:
+    transform 0.12s ease,
+    box-shadow 0.18s ease;
+}
+.press:active {
+  transform: scale(0.97);
 }
